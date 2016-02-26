@@ -1,0 +1,4 @@
+function closeWarnPage(){
+	$("#warnPage").toggle();
+
+}
