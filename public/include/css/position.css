@@ -227,6 +227,19 @@ position: absolute;
 	border-color: blue;
 	color: blue;
 }
+.title-font-size-18px{
+	font-size: 18px;
+}
+
 .title-font-size-24px{
 	font-size: 24px;
+}
+.text-area-style-h25px{
+	margin: 1px;
+    height: 25px;
+    resize: none;
+}
+.padding-5px{
+	padding-top: 5px;
+	padding-bottom:5px;
 }

@@ -1,4 +1,4 @@
 function closeWarnPage(){
-	$("#warnPage").toggle();
+	$( "#dialog" ).dialog("close");
 
 }
