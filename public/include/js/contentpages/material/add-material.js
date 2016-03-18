@@ -53,8 +53,7 @@ function showMethod(Data , dataIndex , unitID){
 }
 function dataSave(){
 	var materialStr = getUserInput("warnPage");
-	materialStr.name =materialStr.materialName+materialStr.materialFormat;
-	console.log(materialStr);
+	
 	$.ajax({
 	        url: APIURL+"Materiel/setMaterielInsert",
 	        type:"GET",
@@ -64,7 +63,7 @@ function dataSave(){
 	        success: function(rs){
 	                
 	                closeWarnPage();
-	                getList();
+	                getList(1,true);
 	                console.log(rs);
 	        },
 	        error:function(xhr, ajaxOptions, thrownError){ 
