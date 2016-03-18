@@ -17,7 +17,57 @@ function onClickNewMaterial(){
 			resizable: false,//鎖定視窗
 
 		});
+		//叫單位
+		selectEvent("Unit/getUnitList" , {typeID_a:0} , "unit" , "unitID");
+
+		selectEvent("Eng/GetEngSingleList" , {type:"b"} , "name" , "engID_b");
 		$(".ui-dialog-titlebar").hide();//隱藏原有的TITLEBAR
 	});
 		
+}
+var APIURL="http://211.21.170.18:8080/waDataBase/api/";
+
+function selectEvent(apiMethod , data , dataIndex , unitID){
+	$.ajax({
+	        url: APIURL+apiMethod,
+	        type:"GET",
+	        data:data,  
+	        dataType:"JSON",
+
+	        success: function(rs){
+	                
+	                showMethod(rs["data"], dataIndex , unitID);
+	        },
+	        error:function(xhr, ajaxOptions, thrownError){ 
+	        }
+	});
+}
+function showMethod(Data , dataIndex , unitID){
+		//var unitStyles=$.parseHTML(unitData);
+		//$(unitStyles).appendTo("#unitID");
+		$.each(Data ,function(Key , Val){
+			// console.log(unitKey , unitVal);
+			selectOptionPut(unitID,Val["uid"],Val[dataIndex]);
+		});
+
+}
+function dataSave(){
+	var materialStr = getUserInput("warnPage");
+	materialStr.name =materialStr.materialName+materialStr.materialFormat;
+	console.log(materialStr);
+	$.ajax({
+	        url: APIURL+"Materiel/setMaterielInsert",
+	        type:"GET",
+	        data:materialStr,  
+	        dataType:"JSON",
+
+	        success: function(rs){
+	                
+	                closeWarnPage();
+	                getList();
+	                console.log(rs);
+	        },
+	        error:function(xhr, ajaxOptions, thrownError){ 
+	        }
+	});
 }

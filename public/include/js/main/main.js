@@ -1,9 +1,10 @@
 $(function(){
   if(location.pathname.search("login.html") == -1){
-  	checkUserLogin();
-  	checkGoogleApi();
-  	firstLoadPage();
-	
+    if(typeof checkUserLogin != "undefined" && typeof checkGoogleApi != "undefined" && typeof firstLoadPage != "undefined" ){
+    	checkUserLogin();
+    	checkGoogleApi();
+    	firstLoadPage();
+    }
   }
 });
 
@@ -56,10 +57,15 @@ function setInputNumberOnly(){
   });
 }
 
-function getUsetInput(){
+function getUserInput(objectID){
   var tmpObj = {};
-  $(".userInput").each(function(){
-    var id= $(this).prop("id");
+  $("#"+objectID).find(".userInput").each(function(){
+    var userInputType = $(this).prop("type");
+    if( userInputType != "radio" ){
+      var id= $(this).prop("id");
+    }else{
+      var id= $(this).prop("name");
+    }
     tmpObj[id] = $(this).val();
   });
   return tmpObj;
@@ -155,4 +161,25 @@ function porcessData(url, data, async, dataType){
        }
     });
     return result;
+}
+
+//關閉dialog
+function closeDialog(itemID){
+  $("#"+itemID).dialog('close').remove();
+}
+
+//取得物件長度
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+// 選單放入選項
+function selectOptionPut(selectID,putVal,putText){
+  if(selectID != "" && selectID.search("#") == -1){
+    $("<option>").appendTo("#"+selectID).prop("value",putVal).text(putText);
+  }
 }
