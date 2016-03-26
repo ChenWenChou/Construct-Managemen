@@ -5,14 +5,18 @@ $(function() {
 });
 
 //取得並顯示材料列表
-var listRow=1;
+var listRow=2;
+var nowRow;
 var nowPage = 1;
 function tranPage(count){
 
   var pages = Math.ceil(count/listRow);
+  $(".tranPage").remove();
+
   for(var i=1; i <= pages;i++){
 
-    var liStr = "<li><a href='#' onclick='getList("+i+")'>"+i+"</a></li>";
+
+    var liStr = "<li class='tranPage'><a href='#' onclick='getList("+i+")'>"+i+"</a></li>";
     var liObj = $.parseHTML(liStr);
    
     $("#nextPages").before(liObj);
@@ -29,11 +33,11 @@ function getList(start, pageCreate){
     if(typeof pageCreate == "undefined"){
         pageCreate = false;
     }
-
+    nowRow = (start-1)*listRow+1;
     $.ajax({
             url: "http://211.21.170.18:8080/waDataBase/api/Materiel/getMaterielList",
             type:"GET",
-            data:{start:start,count:listRow},  
+            data:{start:nowRow,count:listRow},  
             dataType:"JSON",
 
             success: function(rs){
@@ -51,7 +55,7 @@ function getList(start, pageCreate){
 
 function showList(listData){
     var materielList;//取一個變數方便存取他的值
-    $.get("list.html",function(pageContent){
+    $.get("pages/style/material/list.html",function(pageContent){
         materielList = pageContent;
 
     }).done(function(){//執行完才做的動作
@@ -61,6 +65,7 @@ function showList(listData){
             var pageStyles = $.parseHTML(materielList);//轉換成HTML物件
             $(pageStyles).find(".editClick").prop("id",value.uid).click(function(){
                var id = $(this).prop("id");
+               editList(id);
             });
             $(pageStyles).find(".deleteItem").click(function(){
                delList(value.uid);
@@ -101,6 +106,67 @@ function delList(uid){
             success: function(rs){
                    
               getList(1,true);  
+            },
+            error:function(xhr, ajaxOptions, thrownError){ 
+            }
+    });
+}
+
+function editList(uid){
+
+     
+    $.ajax({
+            url: "http://211.21.170.18:8080/waDataBase/api/Materiel/getMaterielList",
+            type:"GET",
+            data:{start:nowRow,count:listRow},  
+            dataType:"JSON",
+
+            success: function(rs){
+                // console.log(rs,uid);
+               var listUid = processEditData(rs.data);
+               console.log(listUid[uid]);
+               onClickNewMaterial(uid,listUid[uid]);
+            },
+            error:function(xhr, ajaxOptions, thrownError){ 
+            }
+    });
+
+}
+
+function processEditData(data){
+    var tmpObj={};
+    $.each(data,function(dataKey,dataValue){
+        tmpObj[dataValue.uid]=dataValue;
+    });
+    return tmpObj;
+}
+
+function putEditData(data,pageObj){
+    $.each(data,function(dataKey,dataValue){
+        if(dataKey!="suList" && dataKey!="unitName"){
+            if(dataValue!="NULL"){
+                $(pageObj).find("#"+dataKey).val(dataValue);
+
+            }
+            
+        }
+        
+    });
+}
+
+function saveEditData(){
+    var data = getUserInput("warnPage");
+    console.log(data);
+     $.ajax({
+            url: "http://211.21.170.18:8080/waDataBase/api/Materiel/setMaterielModify",
+            type:"GET",
+            data:data,  
+            dataType:"JSON",
+
+            success: function(rs){
+                console.log(rs);
+                closeWarnPage();
+                getList(1,true);
             },
             error:function(xhr, ajaxOptions, thrownError){ 
             }

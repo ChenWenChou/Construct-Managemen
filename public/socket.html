@@ -13,54 +13,82 @@
 		}
 	</style>
     <script>
-        function showNoticeToast(msg) {
-            $().toastmessage('showNoticeToast', msg);
-        }
-    </script>
-  </head>
-  <body>
-    <script>
-	$(function(){
-		$("#userName").html(userName);
-	});
-	var socket = io.connect('http://211.21.170.18:7077');
-	var d = new Date(), uid = d.getTime(), userName = uid;
+	    var socket = io.connect('http://127.0.0.1:7077');
+	    var roomCode;
+		socket.on('conn', function (data) {
+			
+			// var postdata = {
 
-	socket.on('chatMsg', function(data) {
-		var nowContent = $('#chart').html();
-        var msgStr = data.userName+':'+data.msg+'<br/>';
-              console.log(data);
-              if(data.uid != uid){
-                  showNoticeToast(data.userName+':<br/>'+data.msg);
-              }
-		$('#chart').html(nowContent+msgStr);
-	});
-	  
-	socket.on('conn', function (data) {
-		
-		var postdata = {
+			// 	'uid': uid,     //用户id
 
-			'uid': uid,     //用户id
+			// 	'userName' : userName   //用户昵称
 
-			'userName' : userName   //用户昵称
+			// }
+			
+			// socket.emit('login', postdata,function(result){});
+			console.log(data);
+			// roomCode = data.roomID;
+		});
+		socket.on('roomCreate', function (data) {
+			console.log(data);
+		});
+		socket.on('roomEnter',function(data){
+			console.log(data);
+		});
+		socket.on('enterAlert',function(data){
+			console.log(data);
+			alert(data.enterID + "進入房間！");
+		});
+		function btnClick(gameID){
+			roomCode = getRoomID();
+			$("#gameList").hide();
+			$("#roomCode").html(roomCode).show();
+			$("#gameListBackBtn").show();
+			socket.emit('roomCreate', {roomID:roomCode},function(result){
+
+			});
 
 		}
-		
-		socket.emit('login', postdata,function(result){});
+		function btnBack(){
+			$("#gameListBackBtn").hide();
+			$("#gameList").show();
+			$("#roomCode").hide();
+			socket.emit('roomLeave', {roomID:roomCode},function(result){
 
-	});
-	  
-	  function send(){
-		socket.emit('chatMsg', {'msg':$('#text').val(),'uid':uid,'name':userName});
-		//$('#text').val('');
-	  }
-    </script>
-    <div id="date"></div>
-	<div id="chart"></div>
-	姓名:
-	<span id="userName"></span><br/>
-	內容:<br/>
-    <textarea id="text" width="200" height="300"></textarea>
-	<input type="button" value="Send" onclick="send();" />
+			});
+		}
+		function getRoomID() {
+			var letters = '0123456789ABCDEF'.split('');
+			var roomID = '';
+			for (var i = 0; i < 6; i++ ) {
+			    roomID += letters[Math.floor(Math.random() * 16)];
+			}
+			return roomID;
+		}
+		function enterGame(){
+			var roomCode = $("#roomCodeInput").val();
+			socket.emit('roomEnter', {roomID:roomCode},function(result){
+
+			});
+		}
+	</script>
+  </head>
+  <body>
+  	<div id="gameList">
+	    <button onclick="btnClick(1)">遊戲1</button>
+	    <button onclick="btnClick(2)">遊戲2</button>
+	    <button onclick="btnClick(3)">遊戲3</button>
+	    <button onclick="btnClick(4)">遊戲4</button>
+	    <button onclick="btnClick(5)">遊戲5</button>
+    </div>
+    <div class="backBtn" id="gameListBackBtn" style="display:none">
+    	<button onclick="btnBack()">返回選單</button>
+    </div>
+    <div id="roomCode" style="display:none"></div>
+    <div id="enterRoomCode">
+    	<input type="text" id="roomCodeInput">
+    	<button onclick="enterGame()">進入</button>
+    </div>
+
   </body>
 </html>
