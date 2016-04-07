@@ -1,3 +1,6 @@
+//製作臨時卡選單
+getTmpCardSelectList();
+
 $("[name='switch']").bootstrapSwitch({
 	onText: "進場",
 	offText: "出場",
@@ -15,6 +18,102 @@ setTimeout(function(){
 },500);
 
 $(".tab-area").hide();
+
+//拍照按鈕
+$("#snap").hide();
+//相機區域
+$("#video").hide();
+//拍照顯示區
+$("#canvas").hide();
+//儲存按鈕
+$("#saveCardInfo").hide();
+
+//啟動相機
+$("#camera").click(function(){
+	$("#snap").show();
+	$(this).hide();
+	$("#video").show();
+	//拍照顯示區
+	$("#canvas").hide();
+	//儲存按鈕
+	$("#saveCardInfo").hide();
+});
+
+//臨時卡選單
+$("#menuList").click(function(){
+
+	$("#tmpCardMenu").css({
+		width: 105
+	}).toggle();
+});
+
+
+//拍照按鈕按下後
+$("#snap").click(function(){
+	$("#canvas").show();
+	$("#camera").show();
+	$(this).hide();
+	$("#video").hide();
+	//儲存按鈕
+	$("#saveCardInfo").show();
+});
+
+function getTmpCardSelectList(){
+	//製作臨時卡選單
+	$.getJSON(configObject.cardinfo,{},function(data){
+		if(data.status){
+			var rsContent = data.tc_data;
+			$.each(rsContent,function(i,v){
+				var options = '<option value="'+v.uid+'">'+v.number+'</option>';
+				$("#cameraArea").find("#card_id").append(options);
+			});		
+		}
+		console.log(data);
+	});
+}
+
+function toSaveCardInfo(){
+	var userInput = getUserInput("tmpCardForUser");
+	userInput.img_txt = getCameraPhoto("canvas");
+	console.log(userInput);
+	$.post(configObject.tmpCardNewUser, userInput,function(rs){
+		var processStatus = $.parseJSON(rs);
+		console.log(processStatus);
+		if(processStatus.status){
+			$("#tmpCardForUser").find(".userInput").val("");
+			//儲存按鈕
+			$("#saveCardInfo").hide();
+			clearCameraPhoto("canvas");
+		}
+	});
+}
+
+//卡片管理
+function tmpCardMana(){
+	//loadPage();
+	tmpManaAreaProcess("tmpCardMana");
+}
+
+//資料管理
+function tmpCardDataMana(){
+	tmpManaAreaProcess("tmpCardDataMana");
+}
+
+//回臨時卡登記
+function backTmpCardCheckin(){
+	$("#tmpManaArea").hide();
+	itemFade("cameraArea", true);
+}
+
+//資料管理區顯示與隱藏
+function tmpManaAreaProcess(showArea){
+	$("#menuList").click();
+	$(".tmpManaArea,#cameraArea").hide();
+	$("#tmpManaArea").show();
+	itemFade(showArea, true);
+	loader(showArea);
+	loadPage("sar/"+showArea, showArea, false, true);
+}
 
 var firstToShow = $("#optionTabs").find(".active").prop("id");
 $("#"+firstToShow+"-area").show();

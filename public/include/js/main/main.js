@@ -12,7 +12,7 @@ $(function(){
 function redirectPage(result){
   if(result.status){
         $.post(configObject.processLoginUrl,result,function(rs){
-           location.href = location.origin;
+           location.href = location.origin + "/content.html";
         });
   }else{
     alert(result.error);
@@ -61,12 +61,19 @@ function getUserInput(objectID){
   var tmpObj = {};
   $("#"+objectID).find(".userInput").each(function(){
     var userInputType = $(this).prop("type");
-    if( userInputType != "radio" ){
+    if( userInputType != "radio" && userInputType != "checkbox"){
       var id= $(this).prop("id");
+      var value = $(this).val();
     }else{
-      var id= $(this).prop("name");
+      var id = $(this).prop("name");
+      var value = $("[name="+id+"]:checked").val();
+      if(value == undefined){
+        value = null;
+      }
     }
-    tmpObj[id] = $(this).val();
+    if(typeof tmpObj[id] == "undefined"){
+      tmpObj[id] = value;
+    }
   });
   return tmpObj;
 }
@@ -179,7 +186,11 @@ Object.size = function(obj) {
 
 // 選單放入選項
 function selectOptionPut(selectID,putVal,putText){
-  if(selectID != "" && selectID.search("#") == -1){
-    $("<option>").appendTo("#"+selectID).prop("value",putVal).text(putText);
+  if(typeof selectID == "string"){
+    if(selectID != "" && selectID.search("#") == -1){
+      $("<option>").appendTo("#"+selectID).prop("value",putVal).text(putText);
+    }
+  }else{
+    $("<option>").appendTo(selectID).prop("value",putVal).text(putText);
   }
 }

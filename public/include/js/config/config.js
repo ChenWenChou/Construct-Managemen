@@ -1,6 +1,6 @@
 //var apurl=location.origin+":99";
-var apurl = "http://211.21.170.17:99";
-var originUrl = 'http://211.21.170.17/';
+var apurl = location.protocol+"//"+location.hostname+":99";
+var originUrl = location.origin+'/';
 var configObject = {
     "LoginUrl": apurl+"/login",
     "langSet": apurl+"/lang/page",
@@ -39,6 +39,27 @@ var configObject = {
     "engInsertData": apurl+"/engineeringmanage/insertdata",
     "engUpdateData": apurl+"/engineeringmanage/updatedata",
     "photocount": apurl+"/qc/photocount",
+    "cardinfo": apurl+"/tmpcard/cardinfo",
+    "cardModify": apurl+"/tmpcard/modify",
+    "tmpNewCard": apurl+"/tmpcard/newcard",
+    "tmpDelCard": apurl+"/tmpcard/delcard",
+    "tmpCardUserInfo": apurl+"/tmpcard/usercardinfo",
+    "tmpCardUserDetail": apurl+"/tmpcard/usercarddetail",
+    "tmpCardModifyUserDetail": apurl+"/tmpcard/modifytmpuserdata",
+    "tmpCardNewUser": apurl+"/tmpcard/newtmpuserdata",
+    "getOrderFormItem": apurl+"/materialexit/getorderformitem",
+    "getSelectItem": apurl+"/materialexit/getselectitem",
+    "exitItemInfo": apurl+"/materialexit/exititeminfo",
+    "exitApply": apurl+"/materialexit/exitapply",
+    "exitOtherApply": apurl+"/materialexit/exitotherapply",
+    "exitItemList": apurl+"/materialexit/exititemlist",
+    "exitOtherItemList": apurl+"/materialexit/exitotheritemlist",
+    "exitSurplusItemList": apurl+"/materialexit/exitsurplusitemlist",
+    "exitOtherSelectItem": apurl+"/materialexit/exitotherselectitem",
+    "getCompanyInfo": apurl+"/material/getcompanyinfo",
+    "makePurchaseImg": apurl+"/material/makepurchaseimg",
+    "getPurchaseImg": apurl+"/material/getpurchaseimg",
+
     //"chartsWS": location.origin+":8080"
-    "chartsWS": "http://211.21.170.17:8080"
+    "WebAPI": "http://211.21.170.18:8080"
 };
