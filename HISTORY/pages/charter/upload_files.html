@@ -1,0 +1,240 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		
+		<link rel="stylesheet" href="include/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="include/css/position.css" />
+		
+		
+		
+	</head>
+	<body>
+		<div class="col-xs-12 col-md-12">
+			<div class="row">
+			<!--btn-->
+			  <div class="col-xs-1 col-md-1 ">
+			    <div class=" pull-right item-border-n text-center item-padding-top-50 item-padding-left-20 uploadList-position">
+			    	<i id="plusItem" class="fa fa-plus-square-o fa-3x mymouse icon2-color"></i><br><!--新增功能按鈕-->
+			    	<i class="fa fa-file-text fa-2x mymouse icon3-color" onclick="closeUpLoadList();"></i><!--顯示列表按鈕-->
+			    	<input type="file" class="content-display-none" id="outputFile">
+			    	
+			    </div>
+			  </div>
+			  <!--btn-end-->
+			  <!--分類選單-->
+			   <div class="col-xs-10 col-md-10">
+			    <div class=" col-xs-12 col-md-12">
+			      <ul class="nav nav-tabs" id="tab-menu">
+						<li role="presentation" class="active"><a href="#" id="charter" class="selectToOpenFile">契約文件</a></li>
+						<li role="presentation" ><a href="#" id="pic" class="selectToOpenFile">圖說</a></li>
+						<li role="presentation"><a href="#" id="change"  class="selectNoToOpenFile">變更</a></li>
+						<i>
+							<i class="fa fa-question-circle fa-lg btn3-position mymouse icon2-color icon-display"><!--說明圖示-->
+								<i class="item-position icon-text item-color"> 
+									<div class="items-padding">說明：分類原因....</div>
+
+								</i>
+							</i>
+						</i>
+					</ul>
+					<!--charter list-->
+					<div  class="col-xs-12 col-md-12 items-font tab_content tab-border " id="charter_content">
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">預算書</div><!--檔名-->
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div><!--上傳時間-->
+							<div class="icon-right col-xs-2 col-md-2">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i><!--編輯-->
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i><!--刪除-->
+							</div>
+						</div>	
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">契約主文</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">工作小組分組報告</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+	                    <div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">開標紀錄</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+
+						<div class="items-padding col-xs-12 col-md-12">
+							<div class="col-xs-8 col-md-8">評審委員會議會議紀錄</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+					</div>
+					<!--charter list-end-->
+					<!--pic list-->
+					<div  class="col-xs-12 col-md-12 items-font tab_content uploadList-display-none tab-border" id="pic_content">
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">建築圖</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>	
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">結構圖</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">景觀圖</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+	                    <div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">水電圖</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+
+						<div class="items-padding col-xs-12 col-md-12">
+							<div class="col-xs-8 col-md-8">消防圖</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+					</div>
+					<!--pic list-end-->
+					<!--change list-->
+					<div  class="col-xs-12 col-md-12 items-font tab_content uploadList-display-none tab-border" id="change_content">
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">契約主文-變更</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>	
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">圖說-變更</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+						<div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">附件-變更</div>
+							<div class="col-xs-2 col-md-2">2016.02.16 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+	                    <div class="items-padding col-xs-12 col-md-12 items-border">
+							<div class="col-xs-8 col-md-8">追加減帳</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+
+						<div class="items-padding col-xs-12 col-md-12">
+							<div class="col-xs-8 col-md-8">展延工期</div>
+							<div class="col-xs-2 col-md-2">2016.02.17 16:00</div>
+							<div class="icon-right col-xs-2 col-md-2 ">
+								<i class="fa fa-pencil-square-o fa-lg mymouse trash-btn-position icon3-color"></i>
+								<i class="fa fa-trash fa-lg icon2-color mymouse trash-btn-position deleteItem"></i>
+							</div>
+						</div>
+						
+					</div>
+					<!--change list-end-->
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+		<!--upload page-->
+		<div id="closePage" class="col-xs-12 col-md-12 item2-position upload-fixed uploadList-display-none">
+			<div class="items-border col-xs-12 col-md-12 items-padding">
+				<i class="col-xs-1 col-md-1 fa fa-upload fa-lg icon-color pull-left "></i><!--上傳圖示-->
+				<div class="col-xs-5 col-md-5 upload-text content-display-none">上傳中 45%</div><!--顯示字-->
+				<i class="fa fa-times fa-lg icon2-color mymouse pull-right" onclick="closeUpLoadList();"></i><!--X-->
+				<i class="fa fa-minus fa-lg icon3-color mymouse pull-right" onclick="uploadList();"></i><!--縮小-->
+			</div>
+			<div class="process-area">
+				<div class="col-xs-12 col-md-12 items2-padding items-border items-font ">
+					<div class="col-xs-5 col-md-5">
+						<p>1.決標紀錄.pdf</p>
+					</div>
+					<div class="col-xs-4 col-md-4">
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+								<span class="sr-only">45% Complete</span>
+								45%
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-2 col-md-2">
+						<p> 上傳中</p>
+					</div>
+					<i class="col-xs-1 col-md-1 fa fa-times fa-lg icon2-color mymouse trash-btn-position"></i><!--取消上傳按鈕-->
+					</div>
+					<div class="col-xs-12 col-md-12 items2-padding items-border items-font">
+						<div class="col-xs-5 col-md-5">
+							<p>2.評審委員會議會議紀錄.pdf</p>
+						</div>
+						<div class="col-xs-4 col-md-4">
+							<div class="progress">
+								<div class="progress-bar progress-bar-success active " role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+									<span class="sr-only">100% Complete</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-2 col-md-2">
+						<p>完成</p>
+					</div>
+				</div>
+			</div>
+		</div>
+			<script type="text/javascript" src="include/js/contentpages/charter/upload_files.js"></script>
+		<!--upload page end-->
+		
+	</body>
+</html>
