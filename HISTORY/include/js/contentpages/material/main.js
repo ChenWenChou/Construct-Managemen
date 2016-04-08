@@ -35,6 +35,9 @@ function addNewUnit(){
                 // console.log(pageStyle);
                  var pageStyleObj = $.parseHTML(pageStyle);
                  $(pageStyleObj).appendTo($("#addDialog").find(".modal-body"));
+                 $(pageStyleObj).find(".fa-plus-square-o").click(function(){
+                    addUnitObj( $(pageStyleObj).find("#unitID"));
+                });
                  //console.log($(pageStyleObj));
                  selectContent(pageStyleObj);
                 
@@ -162,7 +165,9 @@ function modifyDialog(contentObj, clickObj){
                 // console.log(pageStyle);
                  var pageStyleObj = $.parseHTML(pageStyle);
                  $(pageStyleObj).appendTo($("#addDialog").find(".modal-body"));
-                 
+                 $(pageStyleObj).find(".fa-plus-square-o").click(function(){
+                    addUnitObj( $(pageStyleObj).find("#unitID"));
+                });
                  selectContent(pageStyleObj,contentObj);
                 putContent(pageStyleObj,contentObj);
 
@@ -291,11 +296,91 @@ function selectContent(pageStyleObj,contentObj){
     });
 }
 function putContent(pageStyleObj,contentObj){
+    if(contentObj==undefined){
+        return;
+    }
     //console.log(contentObj);
     $.each(contentObj,function(key,value){
         if(value!="NULL"){
             $(pageStyleObj).find("#"+key).val(value);
         }
         
+    });
+}
+
+function addUnitObj(putArea){
+    $("body").find("#addUnitObj").remove();
+    $("<div>").prop("id","addUnitObj").appendTo("body");
+    $("#addUnitObj").bsDialog({
+        title:"新增單位類別",
+        start: function(){
+            var option = {styleKind:"unit",style:"in-mo"};
+                // 取得畫面樣式
+            getStyle(option,function(pageStyle){
+                // console.log(pageStyle);
+                //自訂要的欄位
+                var inputObject={
+                    unit1:{
+                        Name:"單位",
+                        
+                    }
+                };
+                
+                    // console.log(key,val);
+                    var pageStyleObj = $.parseHTML(pageStyle);
+                    
+                    $(pageStyleObj).appendTo($("#addUnitObj").find(".modal-body"));
+                    selectUnitContent(pageStyleObj);
+               
+                // $("#modifyDialog").find(".modal-body").html(pageStyle);
+
+            });
+          
+        },
+        button:[
+          {
+            text:"新增",
+            className: "btn-success",
+            click: function(){
+                var addUnitObj = getUserInput("addUnitObj");
+                addUnitObj.unit2=""; 
+
+              $.ajax({
+                    url: waUnitApi+"Insert_ElTypeUnit",
+                    type:"POST",
+                    data:addUnitObj,  
+                    
+                    dataType:"JSON",
+                    success: function(rs){
+                        $("#addUnitObj").bsDialog("close");
+                        $("<option>").val(rs.data).text(addUnitObj.unit1).appendTo(putArea);
+                    },
+                    
+                });
+            }
+          },
+          {
+            text: "取消",
+            className: "btn-default-font-color",
+            click: function(){
+              $("#addUnitObj").bsDialog("close");
+            }
+          },
+        ]
+    });
+}
+function selectUnitContent(pageStyleObj,contentObj){
+   //console.log(contentObj);
+    $.getJSON(EngApi+"GetEngSingleList" ,{type:"a"},function(rs){
+        //console.log(rs);
+        if(rs.status){
+            $.each(rs.data,function(key,value){
+                selectOptionPut($(pageStyleObj).find("#typeid_a"),value["uid"],value["name"]);
+            });
+            if(contentObj!=undefined){
+                $(pageStyleObj).find("#typeid_a").val(contentObj);
+            }
+            putContent(pageStyleObj,contentObj);
+        }
     });
 }
