@@ -1,0 +1,67 @@
+.page-background-color{
+	background-color: #65C19C; 
+}
+.logo-center{
+	text-align:center;
+}
+.logo-padding-top{
+	padding-top: 25px;
+}
+.logo-padding{
+	padding-left: 56px;
+	padding-top: 50px;
+
+}
+.game-list-padding{
+	padding-left: 18px;
+}
+.icon1-color:hover{
+	color:#65C19C;
+}
+.icon2-color:hover{
+	color:#FF123D;
+}
+.icon3-color:hover{
+	color:#1C5DF3;
+}
+.mymouse{
+	cursor: pointer;
+
+}
+.music-padding-top{
+
+	padding-top: 10px;
+}
+.tab-border{
+	border-radius: 8px;
+	border-right: 4px;
+	border-left: 4px;
+	border-top: 4px;
+	border-bottom: 4px;
+	border-color: #000;
+    border-style: solid;
+    top:20px;
+}
+.character-border{
+	border-radius: 8px;
+	border-right: 4px;
+	border-left: 4px;
+	border-top: 4px;
+	border-bottom: 4px;
+	border-color: #000;
+    border-style: solid;
+    width: 280px;
+	height:280px;
+}
+.content-background-color{
+	background-color: #eca456;
+}
+.character1-background{
+	background-color:#ff99bb;
+}
+.character2-background{
+	background-color:#bce8f1;
+}
+.character3-background{
+	background-color:#EFE4B9;
+}

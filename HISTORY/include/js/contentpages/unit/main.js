@@ -79,6 +79,9 @@ function addNewUnit(){
                         $("#addDialog").bsDialog("close");
                         var option = {styleKind:"list",style:"1grid-modify"};
                      // 取得畫面樣式
+                        addUnitObj.uid=rs.data;
+                        // 加uid
+                        //console.log(rs.data);
                         getStyle(option,function(pageStyle){
                             var newUnitObj = $.parseHTML(pageStyle);
                             $(newUnitObj).addClass(".dataContent");
@@ -188,6 +191,7 @@ function getList(start, pageCreate){
 }
 //dialog方法
 function modifyDialog(contentObj, clickObj){
+    console.log(contentObj);
     $("body").find("#modifyDialog").remove();
     $("<div>").prop("id","modifyDialog").appendTo("body");
     $("#modifyDialog").bsDialog({

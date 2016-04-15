@@ -53,7 +53,7 @@ function loadPage(page,contentID,removeHead,popstate){
     	url: loadPage, 
     	type: "GET",
     	success: function(contents){
-    		putContent( contentID, getContent(contents), removeHead);
+    		putContent( contentID, getRouterContent(contents), removeHead);
     	},
     	error: function(xhr, status, msg){
 			putContent( contentID, "此功能暫不開放" );
@@ -67,12 +67,16 @@ function loader(itemObject,itemClass){
 	if(typeof itemClass == "undefined"){
 		itemClass = "content-loading-img";
 	}
-	var str = '<img class="'+itemClass+'" src="include/images/loader.svg">'
-	$("#"+itemObject).empty();
-	$(str).appendTo("#"+itemObject);
+	var str = '<img class="'+itemClass+'" src="include/images/loader.svg">';
+
+	if(typeof itemObject == "string"){
+		itemObject = "#"+itemObject;
+	}
+	$(itemObject).empty();
+	$(str).appendTo(itemObject);
 }
 
-function getContent(rsContent,removeHead){
+function getRouterContent(rsContent,removeHead){
 	var tmpBody,tmpHead;
 	if(removeHead){
 		$("head :not(.keep)").remove();

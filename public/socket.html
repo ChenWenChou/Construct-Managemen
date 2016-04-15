@@ -1,8 +1,15 @@
 <html>
   <head>
+  	<title>Finger Run</title>
+  	<link rel="stylesheet" href="include/css/font-awesome.min.css" />
+  	<link rel="stylesheet" href="include/css/bootstrap.min.css" />
+  	<link rel="stylesheet" href="include/css/fingerRun.css" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <script src="include/js/socket/socket.io.js"></script>
     <script src="include/js/jquery/jquery-1.11.3.min.js"></script>
+	<script src="include/js/jquery/jquery-ui.min.js"></script>
+	<script src="include/js/fr/fr.js"></script>
+	<script src="include/js/socket/socket.io.js"></script>
+	<script src="include/js/bootstrap/bootstrap.min.js"></script>
     <script src="include/js/toastmessage/jquery.toastmessage.js"></script>
     <link rel="stylesheet" href="include/css/jquery.toastmessage.css">
 	<style>
@@ -74,22 +81,46 @@
 		}
 	</script>
   </head>
-  <body>
-  	<div id="gameList">
-	    <button onclick="btnClick(1)">遊戲1</button>
-	    <button onclick="btnClick(2)">遊戲2</button>
-	    <button onclick="btnClick(3)">遊戲3</button>
-	    <button onclick="btnClick(4)">遊戲4</button>
-	    <button onclick="btnClick(5)">遊戲5</button>
-    </div>
-    <div class="backBtn" id="gameListBackBtn" style="display:none">
-    	<button onclick="btnBack()">返回選單</button>
-    </div>
-    <div id="roomCode" style="display:none"></div>
-    <div id="enterRoomCode">
-    	<input type="text" id="roomCodeInput">
-    	<button onclick="enterGame()">進入</button>
-    </div>
-
+  <body class="page-background-color">
+  	<audio autoplay loop id="FRMUSIC"><source src="FRIMG/FRMUSIC.mp3" /></audio>
+  	<div class="col-xs-12 col-md-12">
+  		<div class="col-xs-1 col-md-1"></div>
+	    <div class="col-xs-10 col-md-10 tab-border content-background-color">
+	    	<div class="col-xs-12 col-md-12  logo-center">
+		    	<div class="col-xs-11 col-md-11 ">
+		    		<img src="FRIMG/fr.png" alt="LOGO" style="width:550px;height:180px;">
+		    	</div>
+		    	<div class="col-xs-1 col-md-1 icon1-color mymouse music-padding-top pull-right playerAudio ">
+		    		<i id="voiceClick" class="fa fa-volume-up fa-2x"></i>
+		    	</div>
+	    	</div>
+		  	<div class="col-xs-12 col-md-12 logo-padding" id="gameList ">
+		  		<div class="col-xs-2 col-md-2 character-border logo-center character1-background mymouse"
+		  		onclick="btnClick(1)">
+				    <img src="FRIMG/hotdog.gif" alt="hotdog" style="width:180px;height:250px;">
+				</div>
+				<div class="col-xs-2 col-md-2 character-border logo-center logo-padding-top
+				character2-background mymouse"
+		  		onclick="btnClick(2)">
+				    <img src="FRIMG/ball.gif" alt="ball" style="width:260px;height:220px;">
+				</div>
+				<div class="col-xs-2 col-md-2 character-border logo-center character3-background mymouse"
+		  		onclick="btnClick(3)">
+				    <img src="FRIMG/doraamo.gif" alt="doraamo" style="width:180px;height:220px;">
+				</div>
+				    <!--<button onclick="btnClick(4)">遊戲4</button>
+				    <button onclick="btnClick(5)">遊戲5</button>-->
+		    </div>
+		    <div class="backBtn " id="gameListBackBtn" style="display:none">
+		    	<button onclick="btnBack()">返回選單</button>
+		    </div>
+		    <div class="" id="roomCode" style="display:none"></div>
+		    <div class="" id="enterRoomCode">
+		    	<input type="text" id="roomCodeInput">
+		    	<button onclick="enterGame()">進入</button>
+		    </div>
+		<div class="col-xs-1 col-md-1"></div>
+		</div>
+	</div>
   </body>
 </html>
