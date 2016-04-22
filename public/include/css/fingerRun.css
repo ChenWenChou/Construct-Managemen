@@ -4,8 +4,17 @@
 .logo-center{
 	text-align:center;
 }
-.logo-padding-top{
+.logo-padding-top-25px{
 	padding-top: 25px;
+}
+.logo-padding-top{
+	padding-top: 35px;
+}
+.logo-padding-top-40px{
+	padding-top: 40px;
+}
+.logo-padding-top-140px{
+	padding-top: 140px;
 }
 .logo-padding{
 	padding-left: 56px;
@@ -49,12 +58,13 @@
 	border-top: 4px;
 	border-bottom: 4px;
 	border-color: #000;
-    border-style: solid;
-    width: 280px;
+	border-style: solid;
+	width: 20em;
 	height:280px;
+	margin: 1.5em;
 }
 .content-background-color{
-	background-color: #eca456;
+	background-color: #fff;
 }
 .character1-background{
 	background-color:#ff99bb;
@@ -64,4 +74,28 @@
 }
 .character3-background{
 	background-color:#EFE4B9;
+}
+.margin-left-12em{
+	margin-left: 12em;
+}
+.Enterbtn-size{
+	height: 10vh;
+    width: 40vw;
+    font-size: 7em;
+}
+.KeyInput-style{
+	height: 10vh;
+	font-size: 8em;
+}
+.KeyInput-position{
+	position: absolute;
+
+	top:50%;
+	margin-left: -11em;
+}
+.Key-font{
+	position: absolute;
+    top: 79%;
+    left: 45%;
+    font-size: 27px;
 }

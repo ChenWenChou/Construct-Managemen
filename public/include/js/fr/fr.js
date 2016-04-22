@@ -11,4 +11,10 @@ $(function(){
 
 // $("#FRMUSIC").currentTime = 0;
 	});	
+	var screenSize=$(document).width();
+	if(screenSize<=984){
+		$("#pcScreen").remove();
+		$("#enterRoomCode").show();
+	}
+	console.log();
 });

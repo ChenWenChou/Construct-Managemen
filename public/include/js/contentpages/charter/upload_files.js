@@ -66,8 +66,93 @@ function closeUpLoadList(){
 }
 
 function openFileUpload(){
-	$("#outputFile").click();
-	$("#uploadListSet").hide();
+ var input = '<input type="file" name="file">';
+ var inputObj = $.parseHTML(input);
+ $(inputObj).hide().click().change(function(){
+   var filename = $(this).val().split('\\').pop();
+   $("#closePage").show();
+
+  var option = {styleKind:"contract_fileMana",style:"uploadfile_list"};
+  getStyle(option, function(pageStyle){
+   
+   var pageStyleObj = $.parseHTML(pageStyle);
+   $(inputObj).appendTo( $(pageStyleObj).find("form")) ;
+   $(pageStyleObj).find(".list-item").eq(0).text(filename);
+   $(pageStyleObj).appendTo(".process-area");
+   var sendObj = {api:"waDataBase/api/Doc/SetDocFileInsert",data:{}};
+   var options = {
+    url: "http://211.21.170.18:88/uploaderAPI",
+    type:"POST",
+    data: sendObj,
+    dataType:"JSON",
+    beforeSend: function(xhr) {
+    	var isCancel = false;
+		$(pageStyleObj).find(".uploadBtn").unbind("click").click(function(){
+			if (!isCancel){
+				xhr.abort();
+				$(pageStyleObj).find("form").ajaxFormUnbind();
+	      		$(pageStyleObj).find(".bar").width("0%");
+	      		$(pageStyleObj).find(".progress").hide();
+	           	$(pageStyleObj).find(".uploadStatus").text("取消");
+	           	$(this).removeClass("fa-times").addClass("fa-repeat");
+	           	isCancel=true;
+			}else{
+				$(pageStyleObj).find(".bar").width("0%");
+				$(pageStyleObj).find(".progress").show();
+	           	$(pageStyleObj).find(".uploadStatus").text("上傳中");
+	           	$(this).removeClass("fa-repeat").addClass("fa-times");
+	           	$(pageStyleObj).find("form").ajaxSubmit(options);
+	           	isCancel=false;
+			}
+      		
+
+     		 // console.log(xhr); 
+     	});
+           var percentVal = '0%';
+      //      $(pageStyleObj).find(".percent").css({
+      //      	position: "absolute",
+    		// left: "50%",
+   			// "margin-left": "-8%",
+      //      }).text(percentVal);
+          $(pageStyleObj).find(".bar").width(percentVal);
+        },
+       uploadProgress: function(event, position, total, percentComplete) {
+     // console.log(event, position, total, percentComplete);
+
+           var percentVal = percentComplete + '%';
+           // $(pageStyleObj).find(".percent").text(percentVal);
+           $(pageStyleObj).find(".bar").width(percentVal);
+           // if(percentVal == "50%"){
+           // 		$(pageStyleObj).find(".percent").css({
+           // 			color:"#FFF",
+           // 		})
+           // }
+       },
+       success: function(rs) {
+        console.log(rs);
+           var percentVal = '100%';
+           // $(pageStyleObj).find(".percent").text(percentVal);
+           $(pageStyleObj).find(".bar").width(percentVal);
+           $(pageStyleObj).find(".uploadStatus").text("完成");
+           $(pageStyleObj).find(".fa-times").remove();
+
+       },
+     complete: function(xhr) {
+      console.log(xhr);
+      // 暫時不用
+       // status.html(xhr.responseText);
+     }
+   };
+   $(pageStyleObj).find("form").ajaxSubmit(options); 
+  // uploadProcess( $(pageStyleObj) );
+
+  }); 
+  });
+ $("#uploadListSet").hide();
+}
+function getUploadFileStyle(uploadObj){
+	console.log($(uploadObj));
+	$(uploadObj).prop("id","").appendTo(".process-area");
 }
 
 function openFileList(){
@@ -89,4 +174,35 @@ function openFileList(){
 //}
 function selectList(){
 	$("#outputFile").click();
+}
+
+function uploadProcess(uploadListObj){
+	console.log("T");
+   	var sendObj = {api:"waDataBase/api/Doc/SetDocFileInsert",data:{}}
+	$(uploadListObj).find("form").prop("action","http://211.21.170.18:88/uploaderAPI").ajaxForm({
+        data:sendObj,  
+        dataType:"JSON",
+
+    	beforeSend: function() {
+
+	        var percentVal = '0%';
+	        $(pageStyleObj).find(".percent").text(percentVal);
+	       
+   	 	},
+    	uploadProgress: function(event, position, total, percentComplete) {
+        	var percentVal = percentComplete + '%';
+        	$(pageStyleObj).find(".percent").text(percentVal);
+        	$(pageStyleObj).find(".bar").width(percentVal);
+    	},
+    	success: function(rs) {
+    		console.log(rs);
+        	var percentVal = '100%';
+        	$(pageStyleObj).find(".percent").text(percentVal);
+        	$(pageStyleObj).find(".bar").width(percentVal);
+    	},
+ 		complete: function(xhr) {
+ 			// 暫時不用
+ 	 		// status.html(xhr.responseText);
+ 		}
+	});
 }
