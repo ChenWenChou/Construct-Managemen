@@ -218,7 +218,7 @@ function modifyDialog(contentObj, clickObj){
                 var sendObj =getUserInput("modifyDialog") ;
                 sendObj.uid = contentObj.uid;
               // console.log(sendObj);
-              clickObj.text(sendObj.unit1);
+              clickObj.text(sendObj.unit1);  
               $.post(UnitApi+"Update_ElTypeUnit",sendObj,function(){
                 console.log(sendObj);
                 $(clickObj).parent()

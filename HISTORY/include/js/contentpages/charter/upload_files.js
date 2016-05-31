@@ -1,190 +1,183 @@
-var processAreaStatus = true;
-var fileType = "selectToOpenFile";
-
-$(function(){ //$(document).ready(function(){ .....  });
-	tabClick();
-	plusItemEvent();
-	$(".deleteItem").click(function(){
-		// console.log($(this));
-		$(this).parent().parent().remove();
-	});
-	$(".selectList").click(function(){
-		// console.log($(this));
-		selectList();
-	});
-//editSet();
-});
-
-function tabClick(){
-	$("#tab-menu").find("li a").click(function(){
-		$("#tab-menu").find("li").removeClass("active");
-		$(this).parent().addClass("active");
-		var id = $(this).prop("id");
-		var className = $(this).prop("class");
-
-		fileType = className;
-		$("#uploadListSet").hide();
-		plusItemEvent();
-		$(".tab_content").hide();
-		$("#"+id+"_content").show();
-		return false;
-	});
+// 更改檔名Dialog
+function fileRename(filename,inputObj){
+	$("body").find("#addDialog").remove();
+    $("<div>").prop("id","addDialog").appendTo("body");
+    $("#addDialog").bsDialog({
+        title:"選擇檔案",headerCloseBtn:false,
+        start: function(){
+        	$("#addDialog").find($("#FileName")).text(filename);
+            var option = {styleKind:"upload",style:"in-mo"};
+                // 取得畫面樣式
+            getStyle(option,function(pageStyle){
+                //自訂要的欄位
+                var inputObject={
+                    unit1:{
+                        Name:"更改名稱",
+                    }
+                };
+                var pageStyleObj = $.parseHTML(pageStyle);
+                $(pageStyleObj).find("#FileRename").val(filename);
+                $(pageStyleObj).find("#FileName").text(filename)
+                $(pageStyleObj).appendTo($("#addDialog").find(".modal-body"));
+                $(pageStyleObj).find($("#selectFile")).click(function(){
+                	openFileUpload();
+                });
+                selectCategory(pageStyleObj);
+            });
+        },
+        button:[
+         	{	
+	          	text: "取消",
+	            className: "btn-default-font-color",
+	            click: function(){
+	              $("#addDialog").bsDialog("close");
+	              $("#renameCheckDialog").bsDialog("close");
+	            }
+          	},
+          	{
+	          	text:"新增",
+	            className: "btn-success",
+	            click: function(){
+	            	filename = $("#addDialog").find("#FileRename").val();
+	            	docTag =  $("#addDialog").find("#SmallcategoryID").val();
+	            	sendFile(inputObj,filename);
+	            	$("#tab-menu").empty();
+	                selectSort();
+	                $("#addDialog").bsDialog("close");
+	              $("#renameCheckDialog").bsDialog("close");
+	          	}
+          	},
+        ]
+    });
 }
-
-function plusItemEvent(){
-	$("#plusItem").unbind("click");
-	if(fileType != "selectNoToOpenFile"){
-		$("#plusItem").click(function(){
-			openFileUpload();
-		});
-		
-	}else{
-		$("#plusItem").click(function(){
-			openFileList();
-		});
-	}
-}
-
+// 上傳佇列
 function uploadList(){
-	// console.log("T");
 	$(".process-area").toggle();
 	if(processAreaStatus){
 		processAreaStatus = false;
+		$(".file-name").removeClass("content-display-none");
 		$(".upload-text").removeClass("content-display-none");
-		
 	}else{
 		processAreaStatus = true;
+		$(".file-name").addClass("content-display-none");
 		$(".upload-text").addClass("content-display-none");
 	}
-	//processAreaStatus = (processAreaStatus) ? false : true;
-	
-
 }
+// 關閉上傳佇列
 function closeUpLoadList(){
 	$("#closePage").toggle();
 
 }
+// 選擇檔案
+function openFile(){
+ 	var input = '<input type="file" name="file">';
+	var inputObj = $.parseHTML(input);
+	$(inputObj).hide()
+	.click()
+	.change(function(){
+		var filename = $(this).val().split('\\').pop();
+		fileRename(filename,inputObj);
+  	});
+ 	$("#uploadListSet").hide();
+}
+//ReUploadFile
+function ReUploadFile(){
+ 	var input = '<input type="file" name="file">';
+	var inputObj = $.parseHTML(input);
+	$(inputObj).hide()
+	.click()
+	.change(function(){
+		var filename = $(this).val().split('\\').pop();
+		fileRename(filename,inputObj);
+  	});
+ 	$("#uploadListSet").hide();
+}
+//上傳的API
+function sendFile(inputObj,filename){
+	$("#closePage").show();
+	var option = {styleKind:"contract_fileMana",style:"uploadfile_list"};
+  	getStyle(option, function(pageStyle){
+   		
+	   	var pageStyleObj = $.parseHTML(pageStyle);
+	  	$(inputObj).appendTo( $(pageStyleObj).find("form")) ;
+	   	$(pageStyleObj).find(".list-item").eq(0).text(filename);
+	   	$(pageStyleObj).appendTo(".process-area");
+	   	var sendObj = {
+	   		api:"waDataBase/api/Doc/SetDocFileInsert",
+		    data:{
+		    	  prjID:prj_uid,
+				  docType:docTag,
+				  userID: 2,
+				  name: filename,
+				  remark: ""
+		   	}
+		};
+	   	var options = {
+		    url: "http://211.21.170.18:88/uploaderAPI",
+		    type:"POST",
+		    data: sendObj,
+		    dataType:"JSON",
+	    	beforeSend: function(xhr) {
+	    		var isCancel = false;
+	    		// 顯示在上傳佇列中
+				$(pageStyleObj).find(".uploadBtn").unbind("click").click(function(){
+					if (!isCancel){
+						xhr.abort();
+						$(pageStyleObj).find("form").ajaxFormUnbind();
+			      		$(pageStyleObj).find(".bar").width("0%");
+			      		$(pageStyleObj).find(".progress").hide();
+			           	$(pageStyleObj).find(".uploadStatus").text("取消");
+			           	$(this).removeClass("fa-times").addClass("fa-repeat");
+			           	removeFileArr($(pageStyleObj));
+			           	isCancel=true;
+						titleBar($(pageStyleObj),filename,percentVal,true);
+					}else
+					{
+						$(pageStyleObj).find(".bar").width("0%");
+						$(pageStyleObj).find(".progress").show();
+			           	$(pageStyleObj).find(".uploadStatus").text("上傳中");
+			           	$(this).removeClass("fa-repeat").addClass("fa-times");
+			           	$(pageStyleObj).find("form").ajaxSubmit(options);
+			           	isCancel=false;
+					}
+				});
+				var dateArr=[];
+				dateArr.push($(pageStyleObj));
+				dateArr.push(myMilliseconds);
+				filesArr.push(dateArr);
+				var percentVal = '0%';
+				$(pageStyleObj).find(".bar").width(percentVal);
+    		},
+		   	uploadProgress: function(event, position, total, percentComplete) {
+		       var percentVal = percentComplete + '%';
+		       $(pageStyleObj).find(".bar").width(percentVal);
+		       titleBar($(pageStyleObj),filename,percentVal,myMilliseconds);
 
-function openFileUpload(){
- var input = '<input type="file" name="file">';
- var inputObj = $.parseHTML(input);
- $(inputObj).hide().click().change(function(){
-   var filename = $(this).val().split('\\').pop();
-   $("#closePage").show();
-
-  var option = {styleKind:"contract_fileMana",style:"uploadfile_list"};
-  getStyle(option, function(pageStyle){
-   
-   var pageStyleObj = $.parseHTML(pageStyle);
-   $(inputObj).appendTo( $(pageStyleObj).find("form")) ;
-   $(pageStyleObj).find(".list-item").eq(0).text(filename);
-   $(pageStyleObj).appendTo(".process-area");
-   var sendObj = {api:"waDataBase/api/Doc/SetDocFileInsert",data:{}};
-   var options = {
-    url: "http://211.21.170.18:88/uploaderAPI",
-    type:"POST",
-    data: sendObj,
-    dataType:"JSON",
-    beforeSend: function(xhr) {
-    	var isCancel = false;
-		$(pageStyleObj).find(".uploadBtn").unbind("click").click(function(){
-			if (!isCancel){
-				xhr.abort();
-				$(pageStyleObj).find("form").ajaxFormUnbind();
-	      		$(pageStyleObj).find(".bar").width("0%");
-	      		$(pageStyleObj).find(".progress").hide();
-	           	$(pageStyleObj).find(".uploadStatus").text("取消");
-	           	$(this).removeClass("fa-times").addClass("fa-repeat");
-	           	isCancel=true;
-			}else{
-				$(pageStyleObj).find(".bar").width("0%");
-				$(pageStyleObj).find(".progress").show();
-	           	$(pageStyleObj).find(".uploadStatus").text("上傳中");
-	           	$(this).removeClass("fa-repeat").addClass("fa-times");
-	           	$(pageStyleObj).find("form").ajaxSubmit(options);
-	           	isCancel=false;
-			}
-      		
-
-     		 // console.log(xhr); 
-     	});
-           var percentVal = '0%';
-      //      $(pageStyleObj).find(".percent").css({
-      //      	position: "absolute",
-    		// left: "50%",
-   			// "margin-left": "-8%",
-      //      }).text(percentVal);
-          $(pageStyleObj).find(".bar").width(percentVal);
-        },
-       uploadProgress: function(event, position, total, percentComplete) {
-     // console.log(event, position, total, percentComplete);
-
-           var percentVal = percentComplete + '%';
-           // $(pageStyleObj).find(".percent").text(percentVal);
-           $(pageStyleObj).find(".bar").width(percentVal);
-           // if(percentVal == "50%"){
-           // 		$(pageStyleObj).find(".percent").css({
-           // 			color:"#FFF",
-           // 		})
-           // }
-       },
-       success: function(rs) {
-        console.log(rs);
-           var percentVal = '100%';
-           // $(pageStyleObj).find(".percent").text(percentVal);
-           $(pageStyleObj).find(".bar").width(percentVal);
-           $(pageStyleObj).find(".uploadStatus").text("完成");
-           $(pageStyleObj).find(".fa-times").remove();
-
-       },
-     complete: function(xhr) {
-      console.log(xhr);
-      // 暫時不用
-       // status.html(xhr.responseText);
-     }
-   };
+		   	},
+		   	success: function(rs) {
+		       var percentVal = '100%';
+		       // $(pageStyleObj).find(".percent").text(percentVal);
+		       $(pageStyleObj).find(".bar").width(percentVal);
+		       $(pageStyleObj).find(".uploadStatus").text("完成");
+		       $(pageStyleObj).find(".fa-times").remove();
+		       $(pageStyleObj).find(".progress-bar-info").removeClass("progress-bar-info");
+		       $(pageStyleObj).find(".progress-bar").addClass("progress-bar-success");
+		       removeFileArr($(pageStyleObj));
+		       titleBar($(pageStyleObj),filename,percentVal,myMilliseconds,true)
+		   	},
+		};
    $(pageStyleObj).find("form").ajaxSubmit(options); 
   // uploadProcess( $(pageStyleObj) );
 
   }); 
-  });
- $("#uploadListSet").hide();
 }
-function getUploadFileStyle(uploadObj){
-	console.log($(uploadObj));
-	$(uploadObj).prop("id","").appendTo(".process-area");
-}
-
-function openFileList(){
-	//$("#outputFile").click();
- 
-	
-	//editSet();
-	$("#uploadListSet").toggle();
-}
-
-//function editSet(){
-	//var place=$("#plusItem").offset();
-	//var btnWidth = $("#plusItem").width();
-	// $("#uploadListSet").offset({
-	// 	top: place.top,
-	// 	left: place.left + btnWidth
-	// });
-	//console.log(btnWidth,place);
-//}
-function selectList(){
-	$("#outputFile").click();
-}
-
+// 上傳佇列設定
 function uploadProcess(uploadListObj){
-	console.log("T");
    	var sendObj = {api:"waDataBase/api/Doc/SetDocFileInsert",data:{}}
-	$(uploadListObj).find("form").prop("action","http://211.21.170.18:88/uploaderAPI").ajaxForm({
+	$(uploadListObj).find("form").prop("action",wrsAPI+"uploaderAPI").ajaxForm({
         data:sendObj,  
         dataType:"JSON",
-
     	beforeSend: function() {
-
 	        var percentVal = '0%';
 	        $(pageStyleObj).find(".percent").text(percentVal);
 	       
@@ -195,14 +188,154 @@ function uploadProcess(uploadListObj){
         	$(pageStyleObj).find(".bar").width(percentVal);
     	},
     	success: function(rs) {
-    		console.log(rs);
         	var percentVal = '100%';
         	$(pageStyleObj).find(".percent").text(percentVal);
         	$(pageStyleObj).find(".bar").width(percentVal);
     	},
- 		complete: function(xhr) {
- 			// 暫時不用
- 	 		// status.html(xhr.responseText);
- 		}
 	});
+}
+// 詢問是否更改檔名Dialog
+function renameCheck(filename,inputObj){
+	$("body").find("#renameCheckDialog").remove();
+    $("<div>").prop("id","renameCheckDialog").appendTo("body");
+    $("#renameCheckDialog").bsDialog({
+        start: function(){
+            var string = "目前的檔案名稱： "+filename+" ，是否更改檔名?";
+            
+
+            $("#renameCheckDialog").find(".modal-body").html(string);
+        },
+        button:[
+          	{
+	          	text: "不更改",
+	            className: "btn-default-font-color",
+	            click: function(){
+	            	sendFile(inputObj,filename);
+	              	$("#renameCheckDialog").bsDialog("close");
+	            }
+          	},
+          	{
+	          	text:"更改",
+	            className: "btn-success",
+	            click: function(){
+	            	fileRename(filename,inputObj); 
+	          	} 
+          	},
+        ]
+    });
+}
+// 選擇檔案 配合 詢問是否更改檔名Dialog
+function openFileUpload(){
+	
+ 	var input = '<input type="file" name="file">';
+	var inputObj = $.parseHTML(input);
+	$(inputObj).hide()
+	.click()
+	.change(function(){
+		var filename = $(this).val().split('\\').pop();
+		if(!$("#addDialog").find($("#FileRename")).val().length)
+		{
+			$("#addDialog").find($("#FileRename")).val(filename);
+		}
+		$("#addDialog").find($("#FileName")).text(filename);
+  	});
+ 	$("#uploadListSet").hide();
+}
+
+function getUploadFileStyle(uploadObj){
+	$(uploadObj).prop("id","").appendTo(".process-area");
+}
+
+function openFileList(){
+	//$("#outputFile").click();
+	//editSet();
+	$("#uploadListSet").toggle();
+}
+
+function selectList(){
+	$("#outputFile").click();
+}
+
+function removeFileArr(pageStyleObj){
+ 	filesArr = $.grep(filesArr,function(content,index){
+        return content!=pageStyleObj;
+    });
+}
+// titleBar
+function titleBar(pageStyleObj,fileName,processVal,myMilliseconds,success){
+	if(processAreaStatus){
+		return;
+	}else if(success) {
+		console.log("T");
+		$("#titleBar").find(".file-name").empty();
+		$("#titleBar").find(".upload-text").empty();
+	}
+	var index = $.grep(filesArr,function(content,index){
+		if(content[1]==myMilliseconds){
+			return index ;
+		}
+    });
+	if(index!=0){
+		return;
+	}else
+	{
+		$("#titleBar").find(".file-name").text(fileName);
+		$("#titleBar").find(".upload-text").text(processVal);
+
+	}
+	
+
+}
+//(修改)更改檔名Dialog
+function modifyRename(filename,inputObj){
+	$("body").find("#modifyDialog").remove();
+    $("<div>").prop("id","modifyDialog").appendTo("body");
+    $("#modifyDialog").bsDialog({
+        title:"修改檔案",headerCloseBtn:false,
+        start: function(){
+        	$("#modifyDialog").find($("#FileName")).text(filename);
+            var option = {styleKind:"upload",style:"in-mo"};
+                // 取得畫面樣式
+            getStyle(option,function(pageStyle){
+                //自訂要的欄位
+                var inputObject={
+                    unit1:{
+                        Name:"更改名稱",
+                    }
+                };
+                var pageStyleObj = $.parseHTML(pageStyle);
+                $(pageStyleObj).find("#FileRename").val(filename);
+                $(pageStyleObj).find("#FileName").text(filename);
+                $(pageStyleObj).find(".list-items").eq(1).remove();
+                $(pageStyleObj).appendTo($("#modifyDialog").find(".modal-body"));
+                // $(pageStyleObj).find($("#selectFile")).click(function(){
+                // 	openFileUpload();
+                // });
+                selectCategory(pageStyleObj);
+            });
+        },
+        button:[
+         	{	
+	          	text: "取消",
+	            className: "btn-default-font-color",
+	            click: function(){
+	              $("#modifyDialog").bsDialog("close");
+	              // $("#renameCheckDialog").bsDialog("close");
+	            }
+          	},
+          	{
+	          	text:"修改",
+	            className: "btn-success",
+	            click: function(){
+	            	filename = $("#modifyDialog").find("#FileRename").val();
+	            	docTag =  $("#modifyDialog").find("#SmallcategoryID").val();
+	            	sendFile(inputObj,filename);
+	            	$("#tab-menu").empty();
+	                selectSort();
+	                $("#modifyDialog").bsDialog("close");
+	              // $("#renameCheckDialog").bsDialog("close");
+	          	}
+          	},
+        ]
+    });
 }

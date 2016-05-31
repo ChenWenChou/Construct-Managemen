@@ -1,4 +1,6 @@
 //var apurl=location.origin+":99";
+var wrsUrl = "http://211.21.170.18:88/bpsAPI";
+var wrsAPI = "http://211.21.170.18:88/";
 var apurl = location.protocol+"//"+location.hostname+":99";
 var originUrl = location.origin+'/';
 var configObject = {
